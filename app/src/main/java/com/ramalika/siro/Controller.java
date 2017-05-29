@@ -57,25 +57,31 @@ public class Controller {
 
         for(int i=0;i<listKecerdasan.size();i++){
             if(listKecerdasan.get(i).getJumlah()>0){
-                arrayKecerdasan[i].setPersentase((float) arrayKecerdasan[i].getJumlah()/listKecerdasan.size());
+                arrayKecerdasan[i].setPersentase(((float) arrayKecerdasan[i].getJumlah()/listCiri.size())*100);
                 rs.add(arrayKecerdasan[i]);
             }
         }
         return rs;
     }
 
-    public ArrayList<String> getListResultCaraBelajar(KecerdasanEntity kecerdasan){
+    public ArrayList<String> getListResultCaraBelajar(int idKecerdasan){
         ArrayList<String> rs;
-        rs=dao.getCaraBelajar(kecerdasan.getID());
+        rs=dao.getCaraBelajar(idKecerdasan);
 
         return rs;
     }
 
-    public ArrayList<String> getListResultKarir(KecerdasanEntity kecerdasan){
+    public ArrayList<String> getListResultKarir(int idKecerdasan){
         ArrayList<String> rs;
-        rs=dao.getKarir(kecerdasan.getID());
+        rs=dao.getKarir(idKecerdasan);
 
         return rs;
+    }
+
+    public int getIDKecerdasan(String namaKecerdasan){
+        openDB();
+        Log.i("IDKecerdasan",""+dao.getIDKecerdasan(namaKecerdasan));
+        return dao.getIDKecerdasan(namaKecerdasan);
     }
 
     public void init(){

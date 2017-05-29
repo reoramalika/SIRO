@@ -16,12 +16,14 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     public static final String myPref="mySharedPreferences";
-    public static final String keyResult="keyResult";
+    public static final String keyResultNama="keyResultNama";
+    public static final String keyResultPersen="keyResultPersen";
     JSONArray jsonArray;
 
     private DAO dao;
@@ -76,17 +78,25 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(MainActivity.this, data, Toast.LENGTH_SHORT).show();
 
                 ArrayList<KecerdasanEntity> rs1=controller.getListResultKecerdasan(((CiriAdapter) getAdapter()).getListChecked());
-                ArrayList<String> rs2=controller.getListResultCaraBelajar(rs1.get(0));
+                /*ArrayList<String> rs2=controller.getListResultCaraBelajar(rs1.get(0).);
 
                 String p="";
                 for (int i=0;i<rs2.size();i++){
                     p=p+"\n"+rs2.get(i);
-                }
-                Toast.makeText(MainActivity.this, p, Toast.LENGTH_SHORT).show();
+                }*/
+                //Toast.makeText(MainActivity.this, p, Toast.LENGTH_SHORT).show();
+                ArrayList<String> rsnama=new ArrayList<>();
+                ArrayList<String> rspersen=new ArrayList<>();
 
                 Bundle b=new Bundle();
-                b.putSerializable(keyResult,new ResultDataHelper(rs1));
-
+                for (int i=0;i<rs1.size();i++){
+                    rsnama.add(rs1.get(i).getNamaKecerdasan());
+                }
+                for (int i=0;i<rs1.size();i++){
+                    rspersen.add(rs1.get(i).getPersentase()+"");
+                }
+                b.putStringArrayList(keyResultNama,rsnama);
+                b.putStringArrayList(keyResultPersen,rspersen);
                 Intent i=new Intent(getApplicationContext(),ResultActivity.class);
                 i.putExtras(b);
                 startActivity(i);

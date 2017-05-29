@@ -11,10 +11,12 @@
     tools:context="com.ramalika.siro.MainActivity"
     android:orientation="vertical">
 
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/myRecylerView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"></android.support.v7.widget.RecyclerView>
+        android:layout_height="200dp"></android.support.v7.widget.RecyclerView>
 
     <Button
         android:id="@+id/btn"

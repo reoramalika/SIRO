@@ -24,7 +24,10 @@ public class ResultActivity extends AppCompatActivity{
     private ArrayAdapter<String> adapter;
     private ArrayList<KecerdasanEntity> listresult;
     private Controller controller=new Controller(ResultActivity.this);
-    public static final String keyResult="keyResult";
+    private Bundle bundle=new Bundle();
+    public static final String keyResultNama="keyResultNama";
+    public static final String keyResultPersen="keyResultPersen";
+    public static final String keyIDKecerdasan="keyID";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,14 +37,16 @@ public class ResultActivity extends AppCompatActivity{
         Bundle b;
         Intent in=getIntent();
         b=in.getExtras();
-        ResultDataHelper r= (ResultDataHelper) b.getSerializable(keyResult);
+        //ResultDataHelper r= (ResultDataHelper) b.getSerializable(keyResult);
 
-        listresult=r.getRs();
+        //listresult=r.getRs();
         ArrayList<String> rs=new ArrayList<>();
-        for (int i=0;i<listresult.size();i++){
-            rs.add("("+listresult.get(i).getPersentase()+")"+listresult.get(i).getNamaKecerdasan());
+        final ArrayList<String> rsNama=b.getStringArrayList(keyResultNama);
+        ArrayList<String> rsPersen=b.getStringArrayList(keyResultPersen);
+        for (int i=0;i<rsNama.size();i++){
+            rs.add("("+rsPersen.get(i)+" %)  |  "+rsNama.get(i));
         }
-        adapter=new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item,rs);
+        adapter=new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item,rs);
 
         listView=(ListView) findViewById(R.id.listResult);
 
@@ -50,7 +55,11 @@ public class ResultActivity extends AppCompatActivity{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-
+                Log.d("cekkk",rsNama.get(pos).toString()+"  "+pos);
+                bundle.putString(keyIDKecerdasan,rsNama.get(pos).toString());
+                Intent i=new Intent(getApplicationContext(),ResultCaraBelajarActivity.class);
+                i.putExtras(bundle);
+                startActivity(i);
             }
         });
     }

@@ -155,6 +155,17 @@ public class DAO extends SQLiteOpenHelper{
         return "Tidak ditemukan";
     }
 
+    public int getIDKecerdasan(String nama){
+        Cursor cursor=getReadableDatabase()
+                .rawQuery("select * from "+tblKecerdasan+" where "+colNamaKecerdasan+"='"+nama+"'",null);
+        while (cursor.moveToNext()){
+            //if (cursor.getString(cursor.getColumnIndex(colNamaKecerdasan))==nama)
+                return cursor.getInt(cursor.getColumnIndex(colIDKecerdasan));
+        }
+
+        return -1;
+    }
+
     public ArrayList<KecerdasanEntity> getAllKecerdasan(){
         ArrayList<KecerdasanEntity> result=new ArrayList<KecerdasanEntity>();
         Cursor cursor=getReadableDatabase()
