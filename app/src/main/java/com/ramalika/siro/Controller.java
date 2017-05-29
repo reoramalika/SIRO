@@ -2,10 +2,11 @@ package com.ramalika.siro;
 
 import android.content.Context;
 import android.database.SQLException;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by Reo Ramalika_2 on 28/04/2017.
@@ -13,8 +14,73 @@ import java.util.Collections;
 
 public class Controller {
     private DAO dao;
+    Context context;
+
+    public Controller(Context context){
+        this.context=context;
+    }
+
+    private void openDB(){
+        dao=new DAO(context);
+        try{
+            dao.createDataBase();
+            dao.openDataBase();
+        }
+        catch (IOException ex){
+            throw new Error("Unable to create database");
+        }
+        catch (SQLException ex){
+            throw ex;
+        }
+    }
+
+    public ArrayList<KecerdasanEntity> getListResultKecerdasan(List<CiriEntity> listCiri){
+        //fungsi belum efisien
+        //max id kecerdasan dan jumlah id tidak dapat dipastikan selalu sama
+        ArrayList<KecerdasanEntity> rs=new ArrayList<>();
+
+        ArrayList<KecerdasanEntity> listKecerdasan=dao.getAllKecerdasan();
+        KecerdasanEntity arrayKecerdasan[]=new KecerdasanEntity[listKecerdasan.size()];
+        for(int i=0;i<listKecerdasan.size();i++){
+            arrayKecerdasan[i]=listKecerdasan.get(i);
+        }
+
+        for(int i=0;i<listCiri.size();i++){
+            String tempKategori;
+            tempKategori=listCiri.get(i).getKategori();
+            int index;
+            for(int j=0;j<(tempKategori.length()/2)+1;j++){
+                index=Integer.parseInt(tempKategori.substring(j*2,j*2+1));
+                arrayKecerdasan[index].setJumlah(arrayKecerdasan[index].getJumlah()+1);
+            }
+        }
+
+        for(int i=0;i<listKecerdasan.size();i++){
+            if(listKecerdasan.get(i).getJumlah()>0){
+                arrayKecerdasan[i].setPersentase((float) arrayKecerdasan[i].getJumlah()/listKecerdasan.size());
+                rs.add(arrayKecerdasan[i]);
+            }
+        }
+        return rs;
+    }
+
+    public ArrayList<String> getListResultCaraBelajar(KecerdasanEntity kecerdasan){
+        ArrayList<String> rs;
+        rs=dao.getCaraBelajar(kecerdasan.getID());
+
+        return rs;
+    }
+
+    public ArrayList<String> getListResultKarir(KecerdasanEntity kecerdasan){
+        ArrayList<String> rs;
+        rs=dao.getKarir(kecerdasan.getID());
+
+        return rs;
+    }
 
     public void init(){
+        openDB();
+
         //initKecerdasan
         KecerdasanEntity kecerdasan=new KecerdasanEntity();
 
@@ -58,210 +124,210 @@ public class Controller {
         ciri.setId(idCiri);
         ciri.setNamaCiri("Mampu mengekspresikan pikirannya dengan baik");
         ciri.setKategori("0");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Mampu menuliskan pengalaman dengan kreatif");
         ciri.setKategori("0");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Gemar bercerita imajinasi dengan indah");
         ciri.setKategori("0");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Daya ingat kuat & mudah menghafal hal-hal baru");
         ciri.setKategori("0");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Suka bertanya sebab-akibat tentang berbagai hal");
         ciri.setKategori("1");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Mampu menjelaskan masalah dengan logis");
         ciri.setKategori("1");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Suka bereksperimen untuk membuat kesimpulan atau menjawab dugaan");
         ciri.setKategori("1");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Menyukai perminan teka-teki/puzle");
         ciri.setKategori("1");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Suka Bermain dengan bentuk-bentuk");
         ciri.setKategori("2");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Tak banyak bicara, namun gemar coret-coret");
         ciri.setKategori("2");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Pandai menyelesaikan masalah");
         ciri.setKategori("2");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Mampu memprediksi apa yang akan terjadi dengan memperhatikan pola kejadian");
         ciri.setKategori("2");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Sensitif terhadap nada dan irama serta kekuatan emosi musik");
         ciri.setKategori("3");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Faham susunan nada yang rumit");
         ciri.setKategori("3");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Sangat menikmati kegiatan fisik seperti berlari, melompat, atau memanjat");
         ciri.setKategori("4");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Memiliki kontrol tubuh yang baik serta reflek yang sempurna");
         ciri.setKategori("4");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Mudah mengingat apa yang dilakukan oleh ornag lain");
         ciri.setKategori("4");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Sangat menikmati saat berada di alam terbuka");
         ciri.setKategori("5");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Mudah mengingat ciri hewan dan tumbuhan");
         ciri.setKategori("5");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Sangat tertarik dengan hal yang berkaitan dengan alam");
         ciri.setKategori("5");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Mudah mengingat informasi yang berkaitan dengan alam");
         ciri.setKategori("5");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Pandai bernegosiasi");
         ciri.setKategori("6");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Mahir bersosialisasi");
         ciri.setKategori("6");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Menikmati ketika berada di tengah orang banyak");
         ciri.setKategori("6");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Pandai membaca situasi dengan baik");
         ciri.setKategori("6");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Memiliki rasa percaya diri yang tinggi");
         ciri.setKategori("7");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Sangat mandiri");
         ciri.setKategori("7");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Mampu untuk fokus");
         ciri.setKategori("7");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Ingin berbeda dari kebanyakan orang");
         ciri.setKategori("7");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
         ciri.setId(idCiri);
         ciri.setNamaCiri("Lebih suka bekerja sendiri");
         ciri.setKategori("7");
-        ciri.setStatus(false);
+        ciri.setChecked(false);
         dao.insertCiri(ciri);
         idCiri++;
 
@@ -620,19 +686,7 @@ public class Controller {
         karir.setNamaKarir("Pemimpin agama");
         karir.setKategori("7");
         dao.insertKarir(karir);
-    }
 
-    public Controller(Context context){
-        dao=new DAO(context);
-        try{
-            dao.createDataBase();
-            dao.openDataBase();
-        }
-        catch (IOException ex){
-            throw new Error("Unable to create database");
-        }
-        catch (SQLException ex){
-            throw ex;
-        }
+        dao.close();
     }
 }

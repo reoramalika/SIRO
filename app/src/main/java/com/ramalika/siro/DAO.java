@@ -58,52 +58,90 @@ public class DAO extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE "+tblKecerdasan+"("+colIDKecerdasan+" INTEGER PRIMARY KEY,"+colNamaKecerdasan+" TEXT);");
-        db.execSQL("CREATE TABLE "+tblCiri+"("+colIDCiri+" INTEGER PRIMARY KEY,"+colNamaCiri+" TEXT,"+colKategoriCiri+" TEXT);");
-        db.execSQL("CREATE TABLE "+tblCaraBelajar+"("+colIDBelajar+" INTEGER PRIMARY KEY,"+colNamaBelajar+" TEXT,"+colKategoriBelajar+" TEXT);");
-        db.execSQL("CREATE TABLE "+tblKarir+"("+colIDKarir+" INTEGER PRIMARY KEY,"+colNamaKarir+" TEXT,"+colKategoriKarir+" TEXT);");
+        try {
+            db.execSQL("CREATE TABLE " + tblKecerdasan + "(" + colIDKecerdasan + " INTEGER PRIMARY KEY," + colNamaKecerdasan + " TEXT);");
+            db.execSQL("CREATE TABLE " + tblCiri + "(" + colIDCiri + " INTEGER PRIMARY KEY," + colNamaCiri + " TEXT," + colKategoriCiri + " TEXT);");
+            db.execSQL("CREATE TABLE " + tblCaraBelajar + "(" + colIDBelajar + " INTEGER PRIMARY KEY," + colNamaBelajar + " TEXT," + colKategoriBelajar + " TEXT);");
+            db.execSQL("CREATE TABLE " + tblKarir + "(" + colIDKarir + " INTEGER PRIMARY KEY," + colNamaKarir + " TEXT," + colKategoriKarir + " TEXT);");
+        }catch (SQLException e){
+            e.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {    }
 
     public void insertKecerdasan(KecerdasanEntity value){
-        ContentValues contentValues=new ContentValues();
-        contentValues.put(colIDKecerdasan,value.getID());
-        contentValues.put(colNamaKecerdasan,value.getNamaKecerdasan());
-        Log.d("SUCCED INSERT", "Insert kecerdasan done!");
-        this.getReadableDatabase().insert(tblKecerdasan, null, contentValues);
-        this.getReadableDatabase().close();
+        try{
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(colIDKecerdasan,value.getID());
+            contentValues.put(colNamaKecerdasan,value.getNamaKecerdasan());
+            Log.d("SUCCED INSERT", "Insert kecerdasan done!");
+            this.getReadableDatabase().insert(tblKecerdasan, null, contentValues);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            this.getReadableDatabase().close();
+            close();
+        }
     }
 
-    public void insertCiri(CiriEntity value)
-    {
-        ContentValues contentValues=new ContentValues();
-        contentValues.put(colIDCiri, value.getId());
-        contentValues.put(colNamaCiri, value.getNamaCiri());
-        Log.d("SUCCED INSERT", "Insert ciri done!");
-        this.getReadableDatabase().insert(tblCiri, null, contentValues);
-        this.getReadableDatabase().close();
+    public void insertCiri(CiriEntity value){
+        try{
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(colIDCiri, value.getId());
+            contentValues.put(colNamaCiri, value.getNamaCiri());
+            contentValues.put(colKategoriCiri,value.getKategori());
+            Log.d("SUCCED INSERT", "Insert ciri done!");
+            this.getReadableDatabase().insert(tblCiri, null, contentValues);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            this.getReadableDatabase().close();
+            close();
+        }
     }
 
     public void insertCaraBelajar(CaraBelajarEntity value){
-        ContentValues contentValues=new ContentValues();
-        contentValues.put(colIDBelajar,value.getID());
-        contentValues.put(colNamaBelajar,value.getNamaCaraBelajar());
-        contentValues.put(colKategoriBelajar, value.getKategori());
-        Log.d("SUCCED INSERT", "Insert cara belajar done!");
-        this.getReadableDatabase().insert(tblCaraBelajar, null, contentValues);
-        this.getReadableDatabase().close();
+        try{
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(colIDBelajar,value.getID());
+            contentValues.put(colNamaBelajar,value.getNamaCaraBelajar());
+            contentValues.put(colKategoriBelajar, value.getKategori());
+            Log.d("SUCCED INSERT", "Insert cara belajar done!");
+            this.getReadableDatabase().insert(tblCaraBelajar, null, contentValues);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            this.getReadableDatabase().close();
+            close();
+        }
     }
 
     public void insertKarir(KarirEntity value){
-        ContentValues contentValues=new ContentValues();
-        contentValues.put(colIDKarir,value.getID());
-        contentValues.put(colNamaKarir,value.getNamaKarir());
-        contentValues.put(colKategoriKarir, value.getKategori());
-        Log.d("SUCCED INSERT", "Insert karir done!");
-        this.getReadableDatabase().insert(tblKarir, null, contentValues);
-        this.getReadableDatabase().close();
+        try{
+            ContentValues contentValues=new ContentValues();
+            contentValues.put(colIDKarir,value.getID());
+            contentValues.put(colNamaKarir,value.getNamaKarir());
+            contentValues.put(colKategoriKarir, value.getKategori());
+            Log.d("SUCCED INSERT", "Insert karir done!");
+            this.getReadableDatabase().insert(tblKarir, null, contentValues);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            this.getReadableDatabase().close();
+            close();
+        }
     }
 
     public String getNamaKecerdasan(int ID){
@@ -119,10 +157,10 @@ public class DAO extends SQLiteOpenHelper{
 
     public ArrayList<KecerdasanEntity> getAllKecerdasan(){
         ArrayList<KecerdasanEntity> result=new ArrayList<KecerdasanEntity>();
-        KecerdasanEntity temp=new KecerdasanEntity();
         Cursor cursor=getReadableDatabase()
                 .rawQuery("select * from "+tblKecerdasan,null);
         while(cursor.moveToNext()){
+            KecerdasanEntity temp=new KecerdasanEntity();
             temp.setID(cursor.getInt(cursor.getColumnIndex(colIDKecerdasan)));
             temp.setNamaKecerdasan(cursor.getString(cursor.getColumnIndex(colNamaKecerdasan)));
             result.add(temp);
@@ -132,23 +170,25 @@ public class DAO extends SQLiteOpenHelper{
 
     public ArrayList<CiriEntity> getAllCiri(){
         ArrayList<CiriEntity> result=new ArrayList<CiriEntity>();
-        CiriEntity temp=new CiriEntity();
         Cursor cursor=getReadableDatabase()
                 .rawQuery("select * from "+tblCiri,null);
+        cursor.moveToFirst();
         while(cursor.moveToNext()){
+            CiriEntity temp=new CiriEntity();
             temp.setId(cursor.getInt(cursor.getColumnIndex(colIDCiri)));
             temp.setNamaCiri(cursor.getString(cursor.getColumnIndex(colNamaCiri)));
             temp.setKategori(cursor.getString(cursor.getColumnIndex(colKategoriCiri)));
-            temp.setStatus(false);
+            temp.setChecked(false);
             result.add(temp);
         }
+        cursor.close();
         return result;
     }
 
     public ArrayList<String> getCaraBelajar(int kategori){
         ArrayList<String> result=new ArrayList<String>();
         Cursor cursor=getReadableDatabase()
-                .rawQuery("select * from "+tblCaraBelajar+" where "+colKategoriBelajar+" like '%"+kategori+"$'",null);
+                .rawQuery("select * from "+tblCaraBelajar+" where "+colKategoriBelajar+" like '%"+kategori+"%'",null);
         while (cursor.moveToNext()){
             result.add(cursor.getString(cursor.getColumnIndex(colNamaBelajar)));
         }

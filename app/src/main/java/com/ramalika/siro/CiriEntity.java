@@ -8,7 +8,7 @@ public class CiriEntity {
     private int id;
     private String namaCiri;
     private String kategori;
-    private boolean status;
+    private boolean isChecked;
 
     public int getId() {
         return id;
@@ -26,12 +26,12 @@ public class CiriEntity {
         this.namaCiri = namaCiri;
     }
 
-    public boolean isStatus() {
-        return status;
+    public boolean isChecked() {
+        return isChecked;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setChecked(boolean checked) {
+        this.isChecked = checked;
     }
 
     public String getKategori() {

@@ -8,6 +8,12 @@ public class KecerdasanEntity {
     private int ID;
     private String namaKecerdasan;
     private float persentase;
+    private int jumlah;
+
+    public KecerdasanEntity(){
+        this.jumlah=0;
+        this.persentase=0.0f;
+    }
 
     public int getID() {
         return ID;
@@ -31,5 +37,13 @@ public class KecerdasanEntity {
 
     public void setPersentase(float persentase) {
         this.persentase = persentase;
+    }
+
+    public int getJumlah() {
+        return jumlah;
+    }
+
+    public void setJumlah(int jumlah) {
+        this.jumlah = jumlah;
     }
 }
